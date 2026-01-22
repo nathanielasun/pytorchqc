@@ -53,6 +53,18 @@ __author__ = "Nathaniel Sun"
 from .gates import Gate
 from .circuit import Circuit
 
+# Visualization
+from .visualization import (
+    CircuitVisualizer,
+    print_circuit,
+    draw_circuit,
+    save_circuit,
+    circuit_summary,
+)
+
+# Examples
+from .examples import run_examples
+
 # Utility functions
 from .utils import (
     # Memory monitoring
@@ -90,6 +102,16 @@ __all__ = [
     # Core classes
     "Gate",
     "Circuit",
+
+    # Visualization
+    "CircuitVisualizer",
+    "print_circuit",
+    "draw_circuit",
+    "save_circuit",
+    "circuit_summary",
+
+    # Examples
+    "run_examples",
 
     # Memory utilities
     "get_gpu_memory_usage",
