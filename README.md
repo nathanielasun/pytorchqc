@@ -34,10 +34,23 @@ pip install matplotlib
 
 ```
 mps_accel_qc/
-├── __init__.py    # Package exports and documentation
-├── gates.py       # Gate class with quantum gate definitions
-├── circuit.py     # Circuit class for building and executing circuits
-└── utils.py       # Utility functions for I/O, memory, and analysis
+├── __init__.py       # Package exports and documentation
+├── gates.py          # Gate class with quantum gate definitions
+├── circuit.py        # Circuit class for building and executing circuits
+├── visualization.py  # Circuit diagrams and probability plots
+├── utils.py          # Utility functions for I/O, memory, and analysis
+└── examples.py       # Example circuits and demonstrations
+```
+
+### Running Examples
+
+```bash
+# From command line
+python -m mps_accel_qc.examples
+
+# Or from Python
+from mps_accel_qc import run_examples
+run_examples()
 ```
 
 ## Quick Start
@@ -235,6 +248,95 @@ print(f"Fidelity: {f:.6f}")
 print_statevector(qc.states, threshold=1e-6, max_terms=10)
 ```
 
+### Visualization
+
+The `visualization` module provides circuit diagrams and probability plots.
+
+#### Quick Functions
+
+```python
+from mps_accel_qc import print_circuit, draw_circuit, save_circuit, circuit_summary
+
+# Print ASCII circuit to terminal
+print_circuit(qc)
+
+# Get matplotlib figure
+fig = draw_circuit(qc, title="My Circuit")
+
+# Save circuit diagram to file
+save_circuit(qc, "circuit.png", dpi=150)
+
+# Print complete summary (circuit + probabilities + counts)
+circuit_summary(qc)
+```
+
+#### CircuitVisualizer Class
+
+For more control, use the `CircuitVisualizer` class:
+
+```python
+from mps_accel_qc import Circuit, CircuitVisualizer
+
+qc = Circuit(3).h(0).cnot(0, 1).cnot(1, 2).execute(shots=1000)
+vis = CircuitVisualizer(qc)
+
+# ASCII circuit diagram
+vis.print_circuit(show_angles=True)
+
+# Matplotlib circuit diagram
+fig = vis.draw_circuit(figsize=(10, 4), title="GHZ Circuit")
+vis.save_circuit("ghz_circuit.png")
+
+# Probability distribution (from statevector)
+vis.print_probabilities(threshold=1e-4, max_states=16)
+fig = vis.plot_probabilities(title="State Probabilities")
+vis.save_probabilities("probs.png")
+
+# Measurement counts (from shots)
+fig = vis.plot_counts(title="Measurement Results")
+vis.save_counts("counts.png")
+
+# Complete summary
+vis.summary()
+```
+
+#### ASCII Circuit Output
+
+```
+q0: ──[H]──●─────────
+           │
+q1: ───────X──●──────
+              │
+q2: ──────────X──────
+```
+
+#### Visualization Methods Reference
+
+| Method | Description |
+|--------|-------------|
+| `print_circuit(show_angles)` | ASCII diagram to terminal |
+| `draw_circuit(figsize, title)` | Returns matplotlib Figure |
+| `save_circuit(filename, dpi)` | Save diagram to PNG/PDF/SVG |
+| `print_probabilities(threshold)` | Probabilities to terminal |
+| `plot_probabilities(figsize)` | Probability bar chart |
+| `save_probabilities(filename)` | Save probability plot |
+| `plot_counts(figsize)` | Measurement counts bar chart |
+| `save_counts(filename)` | Save counts plot |
+| `summary()` | Full text summary of circuit and results |
+
+#### Supported Gate Symbols
+
+| Gate | ASCII | Matplotlib |
+|------|-------|------------|
+| Hadamard | `[H]` | Blue box |
+| Pauli X/Y/Z | `[X]` `[Y]` `[Z]` | Blue box |
+| S, T gates | `[S]` `[T]` | Blue box |
+| Rotations | `[Rx(0.79)]` | Blue box with angle |
+| CNOT | `●` (control) + `X` (target) | Dot + ⊕ |
+| CZ | `●` + `●` | Two dots |
+| SWAP | `×` + `×` | Two × symbols |
+| Measure | `[M]` | Red box |
+
 ## Examples
 
 ### Bell State
@@ -329,6 +431,35 @@ result = (
     .execute(shots=1000)
 )
 print(result.get_counts())
+```
+
+### Circuit Visualization
+
+```python
+from mps_accel_qc import Circuit, CircuitVisualizer, print_circuit
+
+# Build circuit
+qc = Circuit(3)
+qc.h(0)
+qc.cnot(0, 1)
+qc.cnot(1, 2)
+qc.rz(2, math.pi/4)
+qc.execute(shots=1000)
+
+# Print ASCII diagram
+print_circuit(qc)
+# Output:
+# q0: ──[H]──●────────────────
+#            │
+# q1: ───────X──●─────────────
+#               │
+# q2: ──────────X──[Rz(0.79)]─
+
+# Save as image
+vis = CircuitVisualizer(qc)
+vis.save_circuit("my_circuit.png", title="GHZ + Rz")
+vis.save_probabilities("probs.png")
+vis.save_counts("counts.png")
 ```
 
 ## Performance Notes

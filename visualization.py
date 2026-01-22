@@ -16,11 +16,11 @@ Author: Nathaniel Sun
 import math
 from typing import Optional, Dict, List, Tuple, Any, TYPE_CHECKING
 from pathlib import Path
-
+from matplotlib import pyplot as plt
 import torch
 
 if TYPE_CHECKING:
-    from .circuit import Circuit
+    from circuit import Circuit
 
 
 # =============================================================================

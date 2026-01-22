@@ -14,7 +14,7 @@ from typing import Optional, List, Dict, Any, Union
 import torch
 from torch import Tensor
 
-from .gates import Gate
+from gates import Gate
 
 
 class Circuit:

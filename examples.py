@@ -19,9 +19,9 @@ Or from Python:
 
 import math
 
-from .circuit import Circuit
-from .visualization import CircuitVisualizer, print_circuit
-from .utils import (
+from circuit import Circuit
+from visualization import CircuitVisualizer, print_circuit
+from utils import (
     get_available_devices,
     get_best_device,
     print_statevector,
